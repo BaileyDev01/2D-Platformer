@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public float timer;
 
     [Header("Health")]
+
+    public Slider healthSlider;
     public int maxHealth;
     public int currentHealth;
 
@@ -37,6 +40,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        healthSlider.maxValue = maxHealth;
         startPos = transform.position;
         isFacingRight = true;
     }
@@ -72,6 +76,7 @@ public class PlayerController : MonoBehaviour
 
     void Health()
     {
+        healthSlider.value = currentHealth;
         if (currentHealth <= 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -108,6 +113,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Hazard"))
         {
+            currentHealth = 0;
             transform.position = startPos;
         }
         if (other.gameObject.CompareTag("Exit"))
