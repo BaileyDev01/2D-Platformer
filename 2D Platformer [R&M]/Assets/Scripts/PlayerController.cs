@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public float groundDistance;
     public LayerMask layerMask;
+    public Animator animator;
 
     RaycastHit2D hit;
 
@@ -60,15 +61,19 @@ public class PlayerController : MonoBehaviour
     void Movement()
     {
         inputs = Input.GetAxisRaw("Horizontal");
+        animator.SetFloat("Speed", Mathf.Abs(inputs));
         rb.velocity = new UnityEngine.Vector2(inputs * moveSpeed, rb.velocity.y);
 
         hit = Physics2D.Raycast(transform.position, -transform.up, groundDistance, layerMask);
         Debug.DrawRay(transform.position, -transform.up * groundDistance, Color.yellow);
 
+        animator.SetBool("isGrounded", hit.collider);
+
         if (hit.collider)
         {
             if (Input.GetButtonDown("Jump"))
             {
+                animator.SetTrigger("jump");
                 rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
             }
         }
